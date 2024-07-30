@@ -1,0 +1,24 @@
+services:
+  db:
+    container_name: ntd_db_postgres
+    image: postgres:16
+    restart: unless-stopped
+    logging:
+      options:
+        max-file: "5"
+        max-size: "20m"
+    healthcheck:
+      test: psql --echo-all --username $$POSTGRES_USER --dbname $$POSTGRES_DB --command="SELECT VERSION();"
+      interval: 10s
+      retries: 15
+      start_period: 5s
+      timeout: 20s
+    environment:
+      - "POSTGRES_DB=ntd-db"
+      - "POSTGRES_USER=ntd-user"
+      - "POSTGRES_PASSWORD=mdd3EhKT0wqdhWKM"
+      - "TZ=UTC"
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data-db:/var/lib/postgresql/data
